@@ -481,11 +481,12 @@ describe("Test Service", () => {
 					repl: false,
 				},
 				{},
+				{},
 				{}
 			);
 		});
 
-		it("should throw error", async () => {
+		fit("should throw error", async () => {
 			const resolver = svc.createActionResolver("posts.find", {
 				params: {
 					limit: 5,
@@ -545,6 +546,7 @@ describe("Test Service", () => {
 					},
 					a: 5,
 				},
+				{},
 				{},
 				{}
 			);
