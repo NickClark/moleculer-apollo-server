@@ -383,9 +383,9 @@ module.exports = function(mixinOptions) {
 					subscribe: filter
 						? withFilter(
 								() => this.pubsub.asyncIterator(tags),
-								async (payload, params) => {
+								async (payload, params, gctx) => {
 									return payload !== undefined
-										? this.createAsyncIteratorContext().call(filter, {
+										? this.createAsyncIteratorContext(gctx.ctx).call(filter, {
 												...params,
 												payload,
 										  })
@@ -393,8 +393,8 @@ module.exports = function(mixinOptions) {
 								}
 						  )
 						: () => this.pubsub.asyncIterator(tags),
-					resolve: (payload, params) => {
-						return this.createAsyncIteratorContext().call(actionName, {
+					resolve: (payload, params, gctx) => {
+						return this.createAsyncIteratorContext(gctx.ctx).call(actionName, {
 							...params,
 							payload,
 						});
@@ -402,8 +402,13 @@ module.exports = function(mixinOptions) {
 				};
 			},
 
-			createAsyncIteratorContext() {
-				return this.broker.ContextFactory.create(this.broker, null, {}, {});
+			createAsyncIteratorContext(parentContext) {
+				return this.broker.ContextFactory.create(
+					this.broker,
+					null,
+					{},
+					{ meta: parentContext.meta }
+				);
 			},
 
 			/**
