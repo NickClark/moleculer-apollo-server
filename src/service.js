@@ -422,7 +422,7 @@ module.exports = function (mixinOptions) {
 					this.broker,
 					null,
 					{},
-					{ meta: parentContext.meta }
+					{ meta: { ...parentContext.meta } }
 				);
 			},
 
@@ -696,8 +696,9 @@ module.exports = function (mixinOptions) {
 					this.pubsub = new PubSub();
 					// Sort to prevent schema re-generation from resulting in random ordered files
 					// and un-clean git commits
-					const services = this.broker.registry.getServiceList({ withActions: true })
-					                                     .sort((a,b) => a.name.localeCompare(b.name));
+					const services = this.broker.registry
+						.getServiceList({ withActions: true })
+						.sort((a, b) => a.name.localeCompare(b.name));
 					const schema = this.generateGraphQLSchema(services);
 
 					this.logger.debug(
