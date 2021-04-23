@@ -300,7 +300,6 @@ module.exports = function (mixinOptions) {
 							result = await context.ctx.call(
 								actionName,
 								_.defaultsDeep({}, args, params, staticParams),
-								{},
 								await this.actions.actionOptions(root, args, context)
 							);
 						}
